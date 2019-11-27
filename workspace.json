@@ -1,0 +1,15 @@
+{  "name": "classic_sg_allow_cis_ips_http_https",
+  "type": [
+    "terraform-v1.0"
+  ],
+  "tags": ["user:khayama"],
+  "template_repo": {
+    "url": "https://github.com/khayama/classic_sg_allow_cis_ips_http_https"
+  },
+  "template_data": [
+    {
+      "folder": ".",
+      "type": "terraform-v1.0"
+    }
+  ]
+}
