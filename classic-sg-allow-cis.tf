@@ -21,3 +21,36 @@ resource "ibm_security_group_rule" "allow_ipv4_port_80" {
     protocol = "tcp"
     security_group_id = "${ibm_security_group.sg1.id}"
 }
+
+resource "ibm_security_group_rule" "allow_ipv4_port_443" {
+    count = "${length(data.external.cis_ipv4_cidrs.result)}"
+    remote_ip = "${lookup(data.external.cis_ipv4_cidrs.result, count.index)}"
+    direction = "ingress"
+    ether_type = "IPv4"
+    port_range_min = 443
+    port_range_max = 443
+    protocol = "tcp"
+    security_group_id = "${ibm_security_group.sg1.id}"
+}
+
+resource "ibm_security_group_rule" "allow_ipv6_port_80" {
+    count = "${length(data.external.cis_ipv6_cidrs.result)}"
+    remote_ip = "${lookup(data.external.cis_ipv6_cidrs.result, count.index)}"
+    direction = "ingress"
+    ether_type = "IPv6"
+    port_range_min = 80
+    port_range_max = 80
+    protocol = "tcp"
+    security_group_id = "${ibm_security_group.sg1.id}"
+}
+
+resource "ibm_security_group_rule" "allow_ipv6_port_443" {
+    count = "${length(data.external.cis_ipv6_cidrs.result)}"
+    remote_ip = "${lookup(data.external.cis_ipv6_cidrs.result, count.index)}"
+    direction = "ingress"
+    ether_type = "IPv6"
+    port_range_min = 443
+    port_range_max = 443
+    protocol = "tcp"
+    security_group_id = "${ibm_security_group.sg1.id}"
+}
