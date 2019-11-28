@@ -6,18 +6,22 @@ data "external" "cis_ipv6_cidrs" {
   program = ["bash", "get_cis_ipv6_cidrs.sh"]
 }
 
-output "test1" {
-  value = "${ length( data.external.cis_ipv4_cidrs.result ) }"
+resource "ibm_security_group" "sg1" {
+    name = "allow_cis_ips"
+    description = "Allow all HTTP/HTTPS ingress traffic from IBM Cloud Internet Services"
 }
 
-output "test2" {
-  value = "${ lookup( data.external.cis_ipv4_cidrs.result, 2 ) }"
+data "ibm_security_group" "allow_cis_ips" {
+    name = "allow_cis_ips"
 }
 
-output "test3" {
-  value = "${ length( data.external.cis_ipv6_cidrs.result ) }"
-}
-
-output "test4" {
-  value = "${ lookup( data.external.cis_ipv6_cidrs.result, 2 ) }"
+resource "ibm_security_group_rule" "allow_ipv4_port_80" {
+    count = "${length(data.external.cis_ipv4_cidrs.result)}"
+    remote_ip = "${lookup(data.external.cis_ipv4_cidrs.result, count.index)}"
+    direction = "ingress"
+    ether_type = "IPv4"
+    port_range_min = 80
+    port_range_max = 80
+    protocol = "tcp"
+    security_group_id = "${data.ibm_security_group.allow_cis_ips.id}"
 }
