@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# IP を変数に格納
+# CIS Whitelist IP を変数に格納
 ipv4_cidrs=$(curl https://api.cis.cloud.ibm.com/v1/ips | jq -r .result.ipv4_cidrs)
 
 # 長さを変数に格納
