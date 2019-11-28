@@ -8,5 +8,5 @@ data "http" "cis_ips" {
 }
 
 output "cis_ips_key" {
-  value = "${jsondecode(data.http.cis_ips.body)["result"]}"
+  value = "${jsondecode(data.http.cis_ips.body)["result"]["ipv4_cidrs"][0]}"
 }
