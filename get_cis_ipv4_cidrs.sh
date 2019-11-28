@@ -4,15 +4,19 @@
 ipv4_cidrs=$(curl https://api.cis.cloud.ibm.com/v1/ips | jq -r .result.ipv4_cidrs)
 
 # 長さを変数に格納
-lenv4=$(echo $ipv4_cidrs | jq length)
+len=$(echo $ipv4_cidrs | jq length)
+
+# 空の配列を定義
 array=()
 
-for i in $( seq 0 $(($lenv4 - 1)) ); do
+# 配列に key value key value ... と格納
+for i in $( seq 0 $(($len - 1)) ); do
   row=$(echo $ipv4_cidrs | jq -r .[$i])
   array+=( $i)
   array+=( $row )
 done
 
+# 格納した配列を JSON に整形して表示 { "key": "value", "key": "value", ...}
 {
     echo '['
     printf '{"%s": "%s"},\n' "${array[@]}" | sed '$s/,$//'
