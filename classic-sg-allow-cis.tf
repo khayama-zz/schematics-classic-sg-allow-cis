@@ -11,10 +11,6 @@ resource "ibm_security_group" "sg1" {
     description = "Allow all HTTP/HTTPS ingress traffic from IBM Cloud Internet Services"
 }
 
-data "ibm_security_group" "allow_cis_ips" {
-    name = "allow_cis_ips"
-}
-
 resource "ibm_security_group_rule" "allow_ipv4_port_80" {
     count = "${length(data.external.cis_ipv4_cidrs.result)}"
     remote_ip = "${lookup(data.external.cis_ipv4_cidrs.result, count.index)}"
@@ -23,5 +19,5 @@ resource "ibm_security_group_rule" "allow_ipv4_port_80" {
     port_range_min = 80
     port_range_max = 80
     protocol = "tcp"
-    security_group_id = "${data.ibm_security_group.allow_cis_ips.id}"
+    security_group_id = "${ibm_security_group.sg1.id}"
 }
